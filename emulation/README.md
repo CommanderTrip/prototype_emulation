@@ -1,7 +1,9 @@
 # Getting Started
 
-The main application can be launched by navigating to the top directory of the emulation project and running `npm start`
+The main application can be launched by navigating to the `emulation` directory of the project and running `npm start`
  to get the dev, web server running. There won't be any connections to the HTTP server for it is not started yet.
+
+Make sure to also run `npm install` in both the `emulation` folder and the `server` folder to install any necessary packages.
 
 ## Getting the HTTP and Websockets Started
 

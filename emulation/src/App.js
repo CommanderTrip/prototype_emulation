@@ -1,9 +1,9 @@
 import {useEffect, useState} from "react";
 
 import './App.css';
-// import HeartRate from "./component/HeartRate";
 import PatientCard from "./component/PatientCard";
 import {w3cwebsocket as W3CWebSocket} from "websocket";
+import HeartRate from "./component/HeartRate";
 
 const client = new W3CWebSocket("ws://localhost:8000");
 
@@ -46,7 +46,7 @@ const App = () => {
       <div className="App">
         <div className="App-header">
             {patientData ? patientCards : null}
-            {/*<HeartRate/>*/}
+            <HeartRate/>
         </div>
       </div>
   );
