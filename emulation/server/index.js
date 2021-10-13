@@ -1,4 +1,4 @@
-const {isOriginAllowed} = require("./utilities");
+const {isOriginAllowed} = require("./utilities");   //
 const {createPatientList, logPatients} = require("./patientGen");
 
 const WebSocketServer = require("websocket").server;    // Websocket import
@@ -23,12 +23,13 @@ const wsServer = new WebSocketServer({
 
 // Server created, start the patient generation
 let patientData = {}    // Store the patient data here
-const updateTime = 100;
+const updateTime = 1000;    // How quickly to update in ms
+const numOfPatients = 500;   // Number of patients to create
 
 // Set one interval to generate patient data as if receiving from machine
 setInterval(() => {
-    process.stdout.write("Updating patient list...");
-    patientData = createPatientList(1000);
+    process.stdout.write("Updating patient list...");   // Log to console without new line
+    patientData = createPatientList(numOfPatients);
     console.log("Done.");
 }, updateTime)
 
@@ -50,11 +51,11 @@ wsServer.on("request", (request) => {
     }
 
     // Accept the connection
-    const connection = request.accept(null, request.origin);
+    let connection = request.accept(null, request.origin);
     console.log('Client Connected!');
 
     // Set an interval to constantly send the client patient data
-    setInterval(() => {
+    const sendData = setInterval(() => {
         const data = JSON.stringify(patientData);
         connection.sendUTF(data);
         console.log((new Date()) + " - Data Sent to client!")
@@ -70,5 +71,7 @@ wsServer.on("request", (request) => {
     // Handle when a client disconnects
     connection.on("close", () =>{
         console.log("Client has disconnected.");
+        connection = null;
+        clearInterval(sendData);
     })
 });

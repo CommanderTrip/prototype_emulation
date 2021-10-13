@@ -1,16 +1,17 @@
 import {useEffect, useState} from "react";
-
+import {w3cwebsocket as W3CWebSocket} from "websocket"; // https://www.npmjs.com/package/websocket
+import {BrowserRouter, Switch, Route} from 'react-router-dom'; // https://reactrouter.com/web/guides/quick-start
+import PatientDetail from "./component/PatientDetail";
+import Home from "./component/Home";
 import './App.css';
-import PatientCard from "./component/PatientCard";
-import {w3cwebsocket as W3CWebSocket} from "websocket";
-import HeartRate from "./component/HeartRate";
 
+// Attempt connection to a server at specified URL
 const client = new W3CWebSocket("ws://localhost:8000");
 
 const App = () => {
-    const [patientData, setPatientData] = useState({});
-    const [patientCards, setPatientCards] = useState(null);
+    const [patientData, setPatientData] = useState({}); // Save the patient data
 
+    // When the component mounts
     useEffect(() => {
         // When connection to server is established
         client.onopen = () => {
@@ -29,27 +30,24 @@ const App = () => {
         }
     }, []);
 
-    useEffect(() => {
-        const generatePatientCard = () => {
-            return Object.keys(patientData).map((patient) => {
-                return (
-                    <PatientCard key={patient} patientName={patient} patientData={patientData[patient]}/>
-                )
-            })
-        }
 
-        setPatientCards(generatePatientCard());
-    }, [patientData])
-
-
-  return (
-      <div className="App">
-        <div className="App-header">
-            {patientData ? patientCards : null}
-            <HeartRate/>
+    // Control how the routing on the site works
+    return (
+        <div className="App">
+            <div className="App-header">
+                <BrowserRouter>
+                    <Switch>
+                        <Route path={"/patientData/:patientID"}>
+                            <PatientDetail data={patientData}/>
+                        </Route>
+                        <Route path={"/"}>
+                            <Home patientData={patientData}/>
+                        </Route>
+                    </Switch>
+                </BrowserRouter>
+            </div>
         </div>
-      </div>
-  );
+    );
 }
 
 export default App;

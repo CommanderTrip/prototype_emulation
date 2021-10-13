@@ -1,3 +1,5 @@
+
+// Patient card just takes a specified patient's data and presents it in a 'card'
 const PatientCard = ({patientName, patientData}) => {
     return (
         <div className={"patient"}>
