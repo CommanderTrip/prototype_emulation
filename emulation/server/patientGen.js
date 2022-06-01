@@ -49,6 +49,17 @@ module.exports = {
                 //console.log("File closed successfully.");
             })
         })
+    },
+    /**
+     * Generates random data of beds for a hospital
+     *
+     * @param hospitalJSON - Eventually we need to include details specifically to hospital
+     */
+    bedsGeneration: function (hospitalJSON) {
+        let bedsData = {}
+        bedsData['beds_total'] = randomNum(5, 10)
+        bedsData['beds_in_use'] = randomNum(0, bedsData['beds_total'])
+        return bedsData
     }
 }
 
