@@ -1,4 +1,5 @@
 const fs = require("fs");
+const {randomNum} = require("./utilities")
 
 module.exports = {
     /**
@@ -50,25 +51,4 @@ module.exports = {
             })
         })
     },
-    /**
-     * Generates random data of beds for a hospital
-     *
-     * @param hospitalJSON - Eventually we need to include details specifically to hospital
-     */
-    bedsGeneration: function (hospitalJSON) {
-        let bedsData = {}
-        bedsData['beds_total'] = randomNum(5, 10)
-        bedsData['beds_in_use'] = randomNum(0, bedsData['beds_total'])
-        return bedsData
-    }
-}
-
-/**
- * Generates a random number between min and max
- * @param min - minimum value
- * @param max - maximum value
- * @return {number} - a number between min and max
- */
-const randomNum = (min, max) => {
-    return Math.floor(Math.random() * (max - min) + min);
 }

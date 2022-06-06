@@ -10,5 +10,27 @@ module.exports = {
     isOriginAllowed: function (origin) {
         console.log(`The origin is: ${origin}`);
         return true;
+    },
+    /**
+     * Generates a random number between min and max
+     * @param min - minimum value
+     * @param max - maximum value
+     * @return {number} - a number between min and max
+     */
+    randomNum:function (min, max) {
+        return Math.floor(Math.random() * (max - min) + min);
+    },
+    /**
+     *
+     */
+    sendToAPI: function (data) {
+        return fetch("WHATEVER OUR API URL IS", {
+            method: 'POST', // May need to be PUT and not POST
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data  // Only need to stringify if there are nested values
+        });
     }
+
 }

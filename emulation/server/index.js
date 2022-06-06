@@ -1,5 +1,6 @@
-const {isOriginAllowed} = require("./utilities");   //
+const {isOriginAllowed} = require("./utilities");
 const {createPatientList, logPatients} = require("./patientGen");
+const {bedsGeneration, initHospitals, bedsUpdate} = require("./hospitalGen");
 
 const WebSocketServer = require("websocket").server;    // Websocket import
 const http = require("http");   // HTTP server import
@@ -21,24 +22,46 @@ const wsServer = new WebSocketServer({
     autoAcceptConnection: true // THIS WILL NEED TO BE FALSE LATER
 })
 
-// Server created, start the patient generation
-let patientData = {}    // Store the patient data here
-const updateTime = 1000;    // How quickly to update in ms
-const numOfPatients = 500;   // Number of patients to create
 
-// Set one interval to generate patient data as if receiving from machine
-setInterval(() => {
-    process.stdout.write("Updating patient list...");   // Log to console without new line
-    patientData = createPatientList(numOfPatients);
-    console.log("Done.");
-}, updateTime)
+/*
+    Patient Data Generation
+ */
+// // Server created, start the patient generation
+// let patientData = {}    // Store the patient data here
+// const updateTime = 1000;    // How quickly to update in ms
+// const numOfPatients = 500;   // Number of patients to create
+//
+// // Set one interval to generate patient data as if receiving from machine
+// setInterval(() => {
+//     process.stdout.write("Updating patient list...");   // Log to console without new line
+//     patientData = createPatientList(numOfPatients);
+//     console.log("Done.");
+// }, updateTime)
+//
+// // Set interval to save the data to local json
+// setInterval(() => {
+//     process.stdout.write("Logging patient list...");
+//     logPatients(patientData, "roster.json");
+//     console.log("Done.");
+// }, 5000)
 
-// Set another interval to save the data
+/*
+    Hospital data Generation
+ */
+let numOfHospitals = 2
+let hospitals = initHospitals(numOfHospitals)
+
 setInterval(() => {
-    process.stdout.write("Logging patient list...");
-    logPatients(patientData, "roster.json");
-    console.log("Done.");
+    console.log("\nChecking hospital beds...")
+    bedsUpdate(hospitals);  // Update the beds' availability for all hospitals
+    console.log(`Current hospitals' status:`)
+    for (const h of hospitals) {
+        console.log(h)
+    }
+    console.log("Done!")
 }, 5000)
+
+setInterval()
 
 // Will run when a request is received from a client
 wsServer.on("request", (request) => {
