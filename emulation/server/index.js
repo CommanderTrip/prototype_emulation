@@ -50,6 +50,7 @@ const wsServer = new WebSocketServer({
 let numOfHospitals = 14; // 14 at most
 let hospitals = initHospitals(numOfHospitals);
 
+// TODO: Add logic to catch when to do a PUT vs a POST
 setInterval(() => {
     updateHospitals(hospitals);
     for(let h of hospitals) {
