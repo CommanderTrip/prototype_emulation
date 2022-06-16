@@ -1,6 +1,5 @@
-const {isOriginAllowed} = require("./utilities");
-const {createPatientList, logPatients} = require("./patientGen");
-const {bedsGeneration, initHospitals, bedsUpdate} = require("./hospitalGen");
+const {isOriginAllowed, putToAPI} = require("./utilities");
+const {initHospitals, updateHospitals} = require("./generators/hospitalGen");
 
 const WebSocketServer = require("websocket").server;    // Websocket import
 const http = require("http");   // HTTP server import
@@ -48,20 +47,21 @@ const wsServer = new WebSocketServer({
 /*
     Hospital data Generation
  */
-let numOfHospitals = 2
-let hospitals = initHospitals(numOfHospitals)
+let numOfHospitals = 14; // 14 at most
+let hospitals = initHospitals(numOfHospitals);
 
 setInterval(() => {
-    console.log("\nChecking hospital beds...")
-    bedsUpdate(hospitals);  // Update the beds' availability for all hospitals
-    console.log(`Current hospitals' status:`)
-    for (const h of hospitals) {
-        console.log(h)
+    updateHospitals(hospitals);
+    for(let h of hospitals) {
+        putToAPI(`https://imccs-j-api-appservice.azurewebsites.us/api/hospital/UpdateHospital/${h['id']}`, h);
     }
-    console.log("Done!")
-}, 5000)
+    console.log("Data Sent!")
+}, 10000);
 
-setInterval()
+
+
+
+
 
 // Will run when a request is received from a client
 wsServer.on("request", (request) => {

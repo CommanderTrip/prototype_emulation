@@ -1,5 +1,5 @@
 const fs = require("fs");
-const {randomNum} = require("./utilities")
+const {randomNum} = require("../utilities")
 
 module.exports = {
     /**
